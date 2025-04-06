@@ -3,12 +3,22 @@ from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
-import time
 
 BASE_URL = 'https://en.dpr.go.id/anggota/'
 HEADERS = {'User-Agent': 'Lynx'}
 REQUEST_DELAY_SECONDS = 2
-OUTPUT_FILENAME = 'dpr_members.json' # <--- Define output file name
+OUTPUT_FILENAME = 'dpr_members.json'  # <--- Define output file name
+
+FACTION_NAMES_ID = {
+    'Great Indonesia Movement Party Faction': 'Gerindra',
+    'Democrat Party Faction': 'Demokrat',
+    'Indonesian Democratic Party of Struggle Faction': 'PDIP',
+    'Golkar Party Faction': 'Golkar',
+    'Prosperous Justice Party Faction': 'PKS',
+    'National Mandate Party Faction': 'PAN',
+    'National Democrat Party Faction': 'NasDem',
+    'National Awakening Party Faction': 'PKB'
+}
 
 
 def fetch_html_from_url(url):
@@ -28,6 +38,7 @@ def parse_members(individual_row_html_content):
     soup = BeautifulSoup(individual_row_html_content, 'html.parser')
     dpr_members_data = []
     member_rows = soup.select('tbody tr')  # Structure as per 06 Apr 2025
+    unique_factions = set()
 
     if not member_rows:
         print('No members found. Wrong HTML selector?')
@@ -42,6 +53,7 @@ def parse_members(individual_row_html_content):
 
         try:
             # --- Extract data based on the provided HTML structure ---
+            member_id = cells[0].text.strip()
 
             # Cell 1: Image and Profile Link (td class="hidden-xs")
             profile_link_tag = cells[1].find('a')
@@ -68,21 +80,24 @@ def parse_members(individual_row_html_content):
                 # Add checks for other tags if necessary
 
             # Assign based on expected order after the name link + <br> tags
-            faction = other_info[0] if len(other_info) > 0 else 'N/A'
+            faction_name_english = other_info[0] if len(other_info) > 0 else 'N/A'
+            faction_name_id = FACTION_NAMES_ID.get(faction_name_english)
+
             district = other_info[1] if len(other_info) > 1 else 'N/A'
             email_raw = other_info[2] if len(other_info) > 2 else 'N/A'
             email = email_raw.replace('[at]', '@')  # Clean email
 
             # Cell 3: Commission
-            commission = cells[3].text.strip()
+            roles = list(cells[3].stripped_strings)
 
             # --- Structure the Data ---
             dpr_members_data.append({
+                'id': member_id,
                 'name': name,
-                'faction': faction,
+                'faction': faction_name_id,
                 'district': district,
                 'email': email,
-                'commission': commission,
+                'roles': roles,
                 'profile_url': profile_url,
                 'image_url': image_url
             })
@@ -100,7 +115,7 @@ if __name__ == '__main__':
         dpr_members = parse_members(members_html)
 
         # --- Add JSON Saving Logic Here ---
-        if dpr_members: # Only save if members were found
+        if dpr_members:  # Only save if members were found
             print(f"\nSaving {len(dpr_members)} members to {OUTPUT_FILENAME}...")
             try:
                 # Use 'with' to ensure the file is closed properly
