@@ -147,4 +147,4 @@ fabric.properties
 # https://plugins.jetbrains.com/plugin/8053-azure-toolkit-for-intellij
 .idea/**/azureSettings.xml
 
-# End of https://www.toptal.com/developers/gitignore/api/pycharm,macos
+# End of https://www.toptal.com/developers/gitignore/api/pycharm,macos!/.env
