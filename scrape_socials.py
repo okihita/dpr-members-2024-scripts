@@ -18,8 +18,7 @@ if not API_KEY or not CX_ID:
     print("Please set GOOGLE_API_KEY and GOOGLE_CX_ID environment variables or edit the script (insecure).")
     exit()
 
-INPUT_FILENAME = 'dpr_members.json'
-OUTPUT_FILENAME = 'dpr_members_socials.json'  # Save to a new file initially
+SOURCE_FILENAME = 'dpr_members_socials.json'  # Save to a new file initially
 
 PLATFORMS = {
     "instagram": "instagram.com",
@@ -30,6 +29,12 @@ PLATFORMS = {
 }
 
 MANUAL_GOOGLE_SEARCH_API_URL = "https://www.google.com/search?q="
+MANUAL_TWITTER_SEARCH_API_URL = "https://x.com/search?q="
+MANUAL_TIKTOK_SEARCH_API_URL = "https://www.tiktok.com/search?q="
+MANUAL_FACEBOOK_SEARCH_API_URL = "https://www.facebook.com/search/top/?q="
+MANUAL_YOUTUBE_SEARCH_API_URL = "https://www.youtube.com/results?search_query="
+
+
 SEARCH_API_URL = "https://www.googleapis.com/customsearch/v1"
 REQUEST_DELAY_SECONDS = 1.1  # Add delay between API calls to avoid rate limits
 
@@ -126,7 +131,7 @@ def filter_potential_profile_link(link, platform_domain):
                 if path_parts[0].startswith('@'):
                     return f"{parsed.scheme}://{platform_domain}/{path_parts[0]}"  # Custom final combination
                 # Sometimes links omit the '@', check for username-like structure
-                elif path_parts[0] != '' and path_parts[0] not in ['video', 'music', 'explore', 'discover']:  # Ensure it's not known content path
+                elif path_parts[0] != '' and path_parts[0] not in ['video', 'music', 'explore', 'discover', 'tag']:  # Ensure it's not known content path
                     # Assume it might be a profile, needs user check
                     return f"{parsed.scheme}://{platform_domain}/{path_parts[0]}"  # Custom final combination
 
@@ -139,7 +144,7 @@ def filter_potential_profile_link(link, platform_domain):
                 # Basic check: allow if it doesn't contain obvious content paths
                 # More robust checks needed for username vs page vs group structure if required
                 if len(path_parts) > 0 and path_parts[0] not in ['login.php', 'signup.php', 'help', 'settings', 'ajax',
-                                                                 'dialog']:  # Avoid non-profile paths
+                                                                 'dialog', 'photo.php']:  # Avoid non-profile paths
                     # Accept links with query parameters if they look like profiles (e.g., profile.php?id=...)
                     if 'profile.php' in path and 'id=' in parsed.query:
                         return link  # Keep query params for profile.php?id=
@@ -153,14 +158,14 @@ def filter_potential_profile_link(link, platform_domain):
             path_parts = path.strip('/').split('/')
             if len(path_parts) >= 1:
                 first_part = path_parts[0]
-                if first_part == 'channel' and len(path_parts) == 2:
+                if first_part == 'channel': # YouTube channel
                     return cleaned_url
-                elif first_part == 'c' and len(path_parts) == 2:
+                elif first_part == 'c': # YT community
                     return cleaned_url
-                elif first_part.startswith('@') and len(path_parts) == 1:
+                elif first_part.startswith('@'): # YT username
                     return cleaned_url
                 # Sometimes user profiles appear like youtube.com/user/username
-                elif first_part == 'user' and len(path_parts) == 2:
+                elif first_part == 'user' and len(path_parts) >= 2:
                     return cleaned_url
             elif not path or path == '/':  # Allow root channel link if it ever appears
                 return cleaned_url
@@ -176,22 +181,26 @@ def filter_potential_profile_link(link, platform_domain):
 # --- Main Workflow ---
 if __name__ == "__main__":
     print("Starting Social Media Link Finder...")
-    member_data = load_json_file(INPUT_FILENAME)
+    member_data = load_json_file(SOURCE_FILENAME)
 
     if member_data is None:
         exit()
 
     total_members = len(member_data)
-    print(f"Loaded {total_members} members. Will save progress to {OUTPUT_FILENAME}")
+    print(f"Loaded {total_members} members. Will save progress to {SOURCE_FILENAME}")
 
     for index, member in enumerate(member_data):
-        member_name = member.get('name', 'Unknown Name')
+        member_name = member.get('name', 'Nama Tidak Terbaca')
         member_faction = member.get('faction', '')  # Get faction, default to empty string
         print(f"\n--- Processing Member {index + 1}/{total_members}: {member_name} ---")
 
         # Ensure 'socials' dictionary exists
         member.setdefault('socials', {})
+        if member.get('socials'):
+            print(f"  - This person already has saved socials object from the input JSON file.")
+            continue
 
+        webbrowser.open(f"{MANUAL_GOOGLE_SEARCH_API_URL}{member.get('name', 'Frieren')}", new=2, autoraise=False)
         for platform, domain in PLATFORMS.items():
             # Skip if platform link already exists for this member
             if platform in member['socials'] and member['socials'][platform]:
@@ -238,13 +247,13 @@ if __name__ == "__main__":
             if len(potential_links) == 0:
                 print(f"    > No potential profile links found after filtering for {platform.title()}.")
                 print(f"    > Search manually: {MANUAL_GOOGLE_SEARCH_API_URL}{urllib.parse.quote_plus(query)}")
-                webbrowser.open(f"{MANUAL_GOOGLE_SEARCH_API_URL}{urllib.parse.quote_plus(query)}", new=0)
+                webbrowser.open(f"{MANUAL_GOOGLE_SEARCH_API_URL}{urllib.parse.quote_plus(query)}", new=2, autoraise=False)
 
-            for i, url in enumerate(potential_links):
-                print(f"      [{i + 1}] {url}")
-
-            print(f"      > Verify manually: {MANUAL_GOOGLE_SEARCH_API_URL}{urllib.parse.quote_plus(query)}")
-            webbrowser.open(f"{MANUAL_GOOGLE_SEARCH_API_URL}{urllib.parse.quote_plus(query)}", new=0)
+            else:
+                for i, url in enumerate(potential_links):
+                    print(f"      [{i + 1}] {url}")
+                print(f"      > Verify manually: {MANUAL_GOOGLE_SEARCH_API_URL}{urllib.parse.quote_plus(query)}")
+                webbrowser.open(f"{MANUAL_GOOGLE_SEARCH_API_URL}{urllib.parse.quote_plus(query)}", new=2, autoraise=False)
 
             while True:  # Loop for valid input
                 user_choice = input(
@@ -278,9 +287,9 @@ if __name__ == "__main__":
                 member['socials'][platform] = None # Or leave the key absent
 
         # --- Save progress after each member ---
-        if not save_update_json_file(OUTPUT_FILENAME, member_data):
+        if not save_update_json_file(SOURCE_FILENAME, member_data):
             print(f"CRITICAL: Failed to save progress after processing {member_name}. Exiting.")
             exit()  # Stop if saving fails
 
     print("\n--- Finished processing all members ---")
-    print(f"Final data saved to {OUTPUT_FILENAME}")
+    print(f"Final data saved to {SOURCE_FILENAME}")
