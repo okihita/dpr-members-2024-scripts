@@ -210,7 +210,7 @@ if __name__ == "__main__":
             print(f"  - Searching for {platform.title()}...")
 
             # Construct search query
-            query_parts = [f"site:{domain}", member_faction, "dpr ri", member_name]
+            query_parts = [f"site:{domain}", "dpr ri", member_name] # Customize this
             if platform == "tiktok":
                 query_parts.append("-inurl:discover") # For TikTod, avoid "discover"/search links
             query = " ".join(filter(None, query_parts))  # Join non-empty parts
