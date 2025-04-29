@@ -1,0 +1,127 @@
+[
+    {
+        "id": "1",
+        "name": "H. IRMAWAN, S.Sos., M.M.",
+        "faction": "PKB",
+        "district": "ACEH I",
+        "email": "irmawan@dpr.go.id",
+        "roles": [
+            "Commission V"
+        ],
+        "profile_url": "https://en.dpr.go.id/anggota/detail/id/1320",
+        "image_url": "https://berkas.dpr.go.id/sigota/photo/1320.jpg"
+    },
+    {
+        "id": "2",
+        "name": "H. RUSLAN M. DAUD, S.E., M.A.P.",
+        "faction": "PKB",
+        "district": "ACEH II",
+        "email": "ruslanmdaud@dpr.go.id",
+        "roles": [
+            "Commission V",
+            "Steering Committee"
+        ],
+        "profile_url": "https://en.dpr.go.id/anggota/detail/id/1745",
+        "image_url": "https://berkas.dpr.go.id/sigota/photo/1745.jpg"
+    },
+    {
+        "id": "3",
+        "name": "H. ASHARI TAMBUNAN",
+        "faction": "PKB",
+        "district": "SUMATERA UTARA I",
+        "email": "ashari.tambunan@dpr.go.id",
+        "roles": [
+            "Commission VIII",
+            "Legislation Committee"
+        ],
+        "profile_url": "https://en.dpr.go.id/anggota/detail/id/2353",
+        "image_url": "https://berkas.dpr.go.id/sigota/photo/2353.jpg"
+    },
+    {
+        "id": "4",
+        "name": "H. MARWAN DASOPANG, M.Si.",
+        "faction": "PKB",
+        "district": "SUMATERA UTARA II",
+        "email": "marwan.dasopang@dpr.go.id",
+        "roles": [
+            "Commission VIII"
+        ],
+        "profile_url": "https://en.dpr.go.id/anggota/detail/id/1333",
+        "image_url": "https://berkas.dpr.go.id/sigota/photo/1333.jpg"
+    },
+    {
+        "id": "5",
+        "name": "RICO ALVIANO, S.T.",
+        "faction": "PKB",
+        "district": "SUMATERA BARAT I",
+        "email": "rico.alviano@dpr.go.id",
+        "roles": [
+            "Commission XII"
+        ],
+        "profile_url": "https://en.dpr.go.id/anggota/detail/id/2131",
+        "image_url": "https://berkas.dpr.go.id/sigota/photo/2131.jpg"
+    },
+    {
+        "id": "6",
+        "name": "IYETH BUSTAMI",
+        "faction": "PKB",
+        "district": "RIAU I",
+        "email": "iyeth.bustami@dpr.go.id",
+        "roles": [
+            "Commission XII"
+        ],
+        "profile_url": "https://en.dpr.go.id/anggota/detail/id/2356",
+        "image_url": "https://berkas.dpr.go.id/sigota/photo/2356.jpg"
+    },
+    {
+        "id": "7",
+        "name": "H. MAFIRION",
+        "faction": "PKB",
+        "district": "RIAU II",
+        "email": "mafirion@dpr.go.id",
+        "roles": [
+            "Commission XIII"
+        ],
+        "profile_url": "https://en.dpr.go.id/anggota/detail/id/1697",
+        "image_url": "https://berkas.dpr.go.id/sigota/photo/1697.jpg"
+    },
+    {
+        "id": "8",
+        "name": "ELPISINA, S.Sos., M.Si.",
+        "faction": "PKB",
+        "district": "JAMBI",
+        "email": "elpisina@dpr.go.id",
+        "roles": [
+            "Commission XIII",
+            "Committee for Inter-Parliamentary Cooperation"
+        ],
+        "profile_url": "https://en.dpr.go.id/anggota/detail/id/2146",
+        "image_url": "https://berkas.dpr.go.id/sigota/photo/2146.jpg"
+    },
+    {
+        "id": "9",
+        "name": "H. S. N. PRANA PUTRA SOHE",
+        "faction": "PKB",
+        "district": "SUMATERA SELATAN I",
+        "email": "prana.sohe@dpr.go.id",
+        "roles": [
+            "Commission XIII",
+            "Legislation Committee"
+        ],
+        "profile_url": "https://en.dpr.go.id/anggota/detail/id/2153",
+        "image_url": "https://berkas.dpr.go.id/sigota/photo/2153.jpg"
+    },
+    {
+        "id": "10",
+        "name": "BERTU MERLAS, S.T.",
+        "faction": "PKB",
+        "district": "SUMATERA SELATAN II",
+        "email": "bertu.merlas@dpr.go.id",
+        "roles": [
+            "Commission XI",
+            "National Financial Accountability Committee"
+        ],
+        "profile_url": "https://en.dpr.go.id/anggota/detail/id/1367",
+        "image_url": "https://berkas.dpr.go.id/sigota/photo/1367.jpg"
+    }
+]
